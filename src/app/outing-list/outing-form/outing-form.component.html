@@ -1,0 +1,64 @@
+<div class="row">
+  <div class="col-sm-8 col-sm-offset-2">
+    <h2>Enregistrer une nouvelle sortie</h2>
+    <form [formGroup]="bookForm" (ngSubmit)="onSaveBook()">
+      <div class="form-group">
+        <label for="title">Titre/Nom de la sortie</label>
+        <input type="text" id="title"
+               class="form-control" formControlName="title">
+      </div>
+
+
+      <div class="form-group">
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Arrêt TP" [matAutocomplete]="auto" formControlName='stopPoint'>
+        </mat-form-field>
+
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let station of filteredStations" [value]="station.name">
+            <span>{{ station.name }}</span>
+          </mat-option>
+        </mat-autocomplete>
+
+      </div>
+
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description"
+                  class="form-control" formControlName="description">
+        </textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Geojson</label>
+        <textarea id="geojson"
+                  class="form-control" formControlName="geojson">
+        </textarea>
+      </div>
+
+
+      <div class="form-group">
+        <label for="duration">Temps (h)</label>
+        <input type="number" id="duration"
+               class="form-control" formControlName="duration">
+      </div>
+
+      <label for="level">Difficulté</label>
+      <input type="range" class="custom-range" id="level" formControlName="level">
+
+
+      <div class="form-group">
+        <h4>Ajouter une photo</h4>
+        <input type="file" (change)="detectFiles($event)"
+               class="form-control" accept="image/*">
+        <p class="text-success" *ngIf="fileUploaded">Fichier chargé !</p>
+      </div>
+
+      <button class="btn btn-success" [disabled]="bookForm.invalid  || fileIsUploading"
+              type="submit">Enregistrer
+      </button>
+
+    </form>
+  </div>
+</div>

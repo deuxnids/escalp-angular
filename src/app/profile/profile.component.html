@@ -1,0 +1,47 @@
+{{user | json}}
+
+
+<div class="row">
+  <div class="col-sm-8 col-sm-offset-2">
+    <h2>Modifie ton profil</h2>
+    <form [formGroup]="form" (ngSubmit)="onSave()">
+
+      <div class="form-group">
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Nom" formControlName="name">
+        </mat-form-field>
+
+      </div>
+
+      <div class="form-group">
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Arrêt TP" [matAutocomplete]="auto" formControlName='basecamp'>
+        </mat-form-field>
+
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let station of filteredStations" [value]="station.name">
+            <span>{{ station.name }}</span>
+          </mat-option>
+        </mat-autocomplete>
+
+      </div>
+      <div class="form-group">
+
+        <mat-form-field class="full-width">
+          <mat-select placeholder="Sports" formControlName="sports" multiple>
+            <mat-option *ngFor="let sport of all_sports" [value]="sport">{{sport}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+
+
+      <button class="btn btn-success" [disabled]="form.invalid"
+              type="submit">Enregistrer
+      </button>
+
+    </form>
+  </div>
+</div>
+
+
