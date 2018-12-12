@@ -52,8 +52,9 @@ export class MapComponent implements OnInit, OnChanges {
 
 
   ngOnChanges() {
-    const a = this.geojson.replace(/\n/g, '').replace(/\s/g, '').replace(/'/g, '"');
-    this.draw(JSON.parse(a));
+    console.log(this.geojson);
+    //const a = this.geojson.replace(/\n/g, '').replace(/\s/g, '').replace(/'/g, '"');
+    this.draw(this.geojson);
   }
 
   draw(features) {
@@ -110,7 +111,7 @@ const styleFunction = function (feature) {
     'LineString': new ol.style.Style({
       stroke: new ol.style.Stroke({
         color: 'green',
-        width: 1
+        width: 10
       })
     }),
     'MultiLineString': new ol.style.Style({
