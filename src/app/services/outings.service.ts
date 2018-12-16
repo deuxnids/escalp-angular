@@ -28,13 +28,21 @@ export class OutingsService {
   getBooks() {
     firebase.database().ref('/outings')
       .on('value', (data: DataSnapshot) => {
-          this.outings = data.val() ? data.val() : [];
+          const values = data.val();
+          const keys = Object.keys(values);
+
+          this.outings = keys.map(function (key) {
+            const d = values[key];
+            d['uid'] = key;
+            return d;
+          });
+
           this.emitOutings();
         }
       );
   }
 
-  getSingleBook(id: number, cb) {
+  getSingleBook(id: string, cb) {
     firebase.database().ref('/outings/' + id).on('value', (data: DataSnapshot) => {
       cb(data.val());
     });

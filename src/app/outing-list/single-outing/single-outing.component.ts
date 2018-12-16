@@ -11,7 +11,10 @@ import {Outing} from '../../models/outing.model';
 export class SingleOutingComponent implements OnInit {
 
   outing: Outing;
-  id: Number;
+  dangers: string[];
+  danger_dates: string[];
+  from_stations: string[];
+  id: string;
 
   constructor(private route: ActivatedRoute, private booksService: OutingsService,
               private router: Router) {
@@ -20,9 +23,20 @@ export class SingleOutingComponent implements OnInit {
   ngOnInit() {
     this.outing = new Outing();
     this.id = this.route.snapshot.params['id'];
-    this.booksService.getSingleBook(+this.id,
+    this.booksService.getSingleBook(this.id,
       (book: Outing) => {
         this.outing = book;
+        this.dangers = [];
+        this.danger_dates = [];
+        this.from_stations = [];
+        Object.keys(book.dangers).forEach(danger => {
+          this.danger_dates.push(danger);
+          this.dangers.push(book.dangers[danger]);
+        });
+        this.from_stations = [];
+        Object.keys(book.pt_connections).forEach(from => {
+          this.from_stations.push(from);
+        });
       });
   }
 

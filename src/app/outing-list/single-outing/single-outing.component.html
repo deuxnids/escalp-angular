@@ -1,12 +1,49 @@
 <div class="row">
   <div class="col-xs-12">
-    <h1>{{ outing.title }}</h1>
-    <app-map [geojson]="outing.geojson"></app-map>
-    <button class="btn btn-default" (click)="onBack()">Retour</button>
-    <button class="btn btn-default" (click)="update()">Modifier</button>
-    <h3>{{ outing.duration }} h</h3>
-    <p>{{ outing.description }}</p>
+    <h1>{{ outing.name }}</h1>
+
+    <p>{{outing.elevation_min}} -> {{outing.elevation_max}} ({{outing.height_diff_up}})</p>
+
+    <p>{{ outing.description}}</p>
+
     <img style="max-width:400px;" *ngIf="outing.photo" [src]="outing.photo"
          onerror="this.src='../../assets/image-placeholder.png'" width="100px">
   </div>
+</div>
+
+<div class="row">
+  <h3>Pt Connections</h3>
+  <ul *ngFor="let item of from_stations; let i = index">
+    <li *ngFor="let i of [0, 1, 2, 3]">
+      {{outing.pt_connections[item][i]["from"]["location"]["name"]}}
+      {{outing.pt_connections[item][i]["from"]["departure"] | date :"h:mma"}}
+      ->
+      {{outing.pt_connections[item][i]["to"]["location"]["name"]}}
+      {{outing.pt_connections[item][i]["to"]["arrival"] | date :"h:mma"}}
+    </li>
+  </ul>
+
+</div>
+
+
+<div class="row">
+  <h3>Avalanches</h3>
+  <ul>
+    <li *ngFor="let item of dangers; let i = index">
+      {{danger_dates[i]}} {{item['dangerlevel']}}
+    </li>
+  </ul>
+</div>
+
+
+<div class="row">
+  <h3>Weather</h3>
+  <ul>
+  </ul>
+</div>
+
+<div class="row">
+  <h3>Map</h3>
+
+  <app-map [geojson]="outing.geojson"></app-map>
 </div>

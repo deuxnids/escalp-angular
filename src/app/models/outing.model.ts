@@ -6,6 +6,8 @@ export class Outing {
   duration: string;
   stopPoint: string;
   geojson: string;
+  dangers: string[];
+  pt_connections: string[];
   constructor() {
   }
 }
