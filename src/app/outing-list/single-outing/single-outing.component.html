@@ -1,4 +1,7 @@
-<div class="row">
+<mat-spinner *ngIf="loading"></mat-spinner>
+
+
+<div class="row" *ngIf="!loading">
   <div class="col-xs-12">
     <h1>{{ outing.name }}</h1>
 
@@ -11,7 +14,7 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row" *ngIf="!loading">
   <h3>Pt Connections</h3>
   <ul *ngFor="let item of from_stations; let i = index">
     <li *ngFor="let i of [0, 1, 2, 3]">
@@ -26,7 +29,7 @@
 </div>
 
 
-<div class="row">
+<div class="row" *ngIf="!loading">
   <h3>Avalanches</h3>
   <ul>
     <li *ngFor="let item of dangers; let i = index">
@@ -36,13 +39,13 @@
 </div>
 
 
-<div class="row">
+<div class="row" *ngIf="!loading">
   <h3>Weather</h3>
   <ul>
   </ul>
 </div>
 
-<div class="row">
+<div class="row" *ngIf="!loading">
   <h3>Map</h3>
 
   <app-map [geojson]="outing.geojson"></app-map>

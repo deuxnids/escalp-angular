@@ -22,7 +22,7 @@ import {UsersService} from './services/users.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule, MatAutocompleteModule,
-  MatDatepickerModule, MatNativeDateModule
+  MatDatepickerModule, MatNativeDateModule, MatProgressSpinnerModule
 } from '@angular/material';
 import {PlannerService} from './services/planner.service';
 
@@ -60,7 +60,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     MatButtonModule, MatCheckboxModule,
     MatFormFieldModule, MatOptionModule, MatSelectModule,
-    MatInputModule, MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule,
+    MatInputModule, MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, MatProgressSpinnerModule,
     ReactiveFormsModule
 
   ],

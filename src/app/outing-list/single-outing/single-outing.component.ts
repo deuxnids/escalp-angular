@@ -15,12 +15,14 @@ export class SingleOutingComponent implements OnInit {
   danger_dates: string[];
   from_stations: string[];
   id: string;
+  loading: boolean;
 
   constructor(private route: ActivatedRoute, private booksService: OutingsService,
               private router: Router) {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.outing = new Outing();
     this.id = this.route.snapshot.params['id'];
     this.booksService.getSingleBook(this.id,
@@ -34,9 +36,13 @@ export class SingleOutingComponent implements OnInit {
           this.dangers.push(book.dangers[danger]);
         });
         this.from_stations = [];
-        Object.keys(book.pt_connections).forEach(from => {
-          this.from_stations.push(from);
-        });
+        if (book.pt_connections !== undefined) {
+
+          Object.keys(book.pt_connections).forEach(from => {
+            this.from_stations.push(from);
+          });
+        }
+        this.loading = false;
       });
   }
 
