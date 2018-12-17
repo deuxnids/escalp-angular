@@ -28,6 +28,7 @@ export class SingleOutingComponent implements OnInit {
     this.booksService.getSingleBook(this.id,
       (book: Outing) => {
         this.outing = book;
+        this.loading = false;
         this.dangers = [];
         this.danger_dates = [];
         this.from_stations = [];
@@ -42,7 +43,6 @@ export class SingleOutingComponent implements OnInit {
             this.from_stations.push(from);
           });
         }
-        this.loading = false;
       });
   }
 
