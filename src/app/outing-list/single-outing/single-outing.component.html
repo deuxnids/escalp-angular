@@ -1,19 +1,15 @@
-<mat-spinner *ngIf="loading"></mat-spinner>
+<div class="row" *ngIf="loading">
+  <div class="col-xs-2 col-xs-offset-5">
 
-<div class="row">
-
-  <div class="col-xs-6">
-
-
+    <mat-spinner></mat-spinner>
   </div>
-
-
 </div>
+
 
 
 <div class="row" *ngIf="!loading">
   <h1>{{ outing.name }}</h1>
-  <div class="col-xs-2">
+  <div class="col-md-4">
 
     <div class="media">
       <div class="media-left">
@@ -27,10 +23,62 @@
       </div>
     </div>
 
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" src="assets/tp.png" alt="..." style="width: 64px; height: 64px;">
+        </a>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading">Accès en transport public</h4>
+
+        <ul *ngFor="let item of from_stations; let i = index">
+          <li *ngFor="let i of [0, 1, 2, 3]">
+            {{outing.pt_connections[item][i]["from"]["location"]["name"]}}
+            {{outing.pt_connections[item][i]["from"]["departure"] | date :"h:mma"}}
+            ->
+            {{outing.pt_connections[item][i]["to"]["location"]["name"]}}
+            {{outing.pt_connections[item][i]["to"]["arrival"] | date :"h:mma"}}
+          </li>
+        </ul>
+
+      </div>
+    </div>
+
+
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" src="assets/avalanche.png" alt="..." style="width: 64px; height: 64px;">
+        </a>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading">Avalanche</h4>
+        <ul>
+          <li *ngFor="let item of dangers; let i = index">
+            {{danger_dates[i]}} {{item['dangerlevel']}}
+          </li>
+        </ul>
+
+      </div>
+    </div>
+
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" src="assets/weather.png" alt="..." style="width: 64px; height: 64px;">
+        </a>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading">Météo</h4>
+      </div>
+    </div>
+
+
   </div>
 
 
-  <div class="col-xs-10">
+  <div class="col-md-8">
     <p>{{ outing.description}}</p>
 
     <img style="max-width:400px;" *ngIf="outing.photo" [src]="outing.photo"
@@ -38,36 +86,6 @@
   </div>
 </div>
 
-<div class="row" *ngIf="!loading">
-  <h3>Pt Connections</h3>
-  <ul *ngFor="let item of from_stations; let i = index">
-    <li *ngFor="let i of [0, 1, 2, 3]">
-      {{outing.pt_connections[item][i]["from"]["location"]["name"]}}
-      {{outing.pt_connections[item][i]["from"]["departure"] | date :"h:mma"}}
-      ->
-      {{outing.pt_connections[item][i]["to"]["location"]["name"]}}
-      {{outing.pt_connections[item][i]["to"]["arrival"] | date :"h:mma"}}
-    </li>
-  </ul>
-
-</div>
-
-
-<div class="row" *ngIf="!loading">
-  <h3>Avalanches</h3>
-  <ul>
-    <li *ngFor="let item of dangers; let i = index">
-      {{danger_dates[i]}} {{item['dangerlevel']}}
-    </li>
-  </ul>
-</div>
-
-
-<div class="row" *ngIf="!loading">
-  <h3>Weather</h3>
-  <ul>
-  </ul>
-</div>
 
 <div class="row" *ngIf="!loading">
   <h3>Map</h3>
