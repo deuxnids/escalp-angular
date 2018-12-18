@@ -34,6 +34,7 @@ export class MapComponent implements OnInit, OnChanges {
 
     this.features = (new this.ol.format.GeoJSON()).readFeatures(features);
     const layer = this.ga.layer.create('ch.swisstopo.pixelkarte-farbe');
+    const pt_layer = this.ga.layer.create('ch.bav.haltestellen-oev');
 
     const vectorLayer = new this.ol.layer.Vector({
       source: new this.ol.source.Vector({
@@ -49,7 +50,7 @@ export class MapComponent implements OnInit, OnChanges {
 
     this.map = new this.ga.Map({
       target: 'map',
-      layers: [layer, vectorLayer, vectorLayerStops],
+      layers: [layer, vectorLayer, vectorLayerStops, pt_layer],
       view: new this.ol.View({
         resolution: 100,
         center: [2670000, 1160000]
@@ -57,6 +58,7 @@ export class MapComponent implements OnInit, OnChanges {
     });
 
     const extent = this.features[0].getGeometry().getExtent();
+    console.log(extent);
     this.map.getView().fit(extent, this.map.getSize());
 
   }

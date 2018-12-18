@@ -25,6 +25,7 @@ import {
   MatDatepickerModule, MatNativeDateModule, MatProgressSpinnerModule
 } from '@angular/material';
 import {PlannerService} from './services/planner.service';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 
 const appRoutes: Routes = [
@@ -36,6 +37,7 @@ const appRoutes: Routes = [
   {path: 'outings/view/:id', component: SingleOutingComponent},
   {path: 'plan', component: PlanComponent},
   {path: 'profile', component: ProfileComponent},
+  {path: '', component: LandingPageComponent},
 ];
 
 @NgModule({
@@ -49,7 +51,8 @@ const appRoutes: Routes = [
     SingleOutingComponent,
     MapComponent,
     PlanComponent,
-    ProfileComponent
+    ProfileComponent,
+    LandingPageComponent
   ],
   imports: [
     BrowserModule,
