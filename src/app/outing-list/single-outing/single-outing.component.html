@@ -1,12 +1,36 @@
 <mat-spinner *ngIf="loading"></mat-spinner>
 
+<div class="row">
+
+  <div class="col-xs-6">
+
+
+  </div>
+
+
+</div>
+
 
 <div class="row" *ngIf="!loading">
-  <div class="col-xs-12">
-    <h1>{{ outing.name }}</h1>
+  <h1>{{ outing.name }}</h1>
+  <div class="col-xs-2">
 
-    <p>{{outing.elevation_min}} -> {{outing.elevation_max}} ({{outing.height_diff_up}})</p>
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" src="assets/elevation.png" alt="..." style="width: 64px; height: 64px;">
+        </a>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading">Dénivelé</h4>
+        <p>{{outing.elevation_min}} -> {{outing.elevation_max}} = {{outing.height_diff_up}}</p>
+      </div>
+    </div>
 
+  </div>
+
+
+  <div class="col-xs-10">
     <p>{{ outing.description}}</p>
 
     <img style="max-width:400px;" *ngIf="outing.photo" [src]="outing.photo"
