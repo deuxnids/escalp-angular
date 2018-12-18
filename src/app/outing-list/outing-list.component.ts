@@ -9,36 +9,26 @@ import {Subscription} from 'rxjs';
   templateUrl: './outing-list.component.html',
   styleUrls: ['./outing-list.component.scss']
 })
-export class OutingListComponent implements OnInit, OnDestroy {
+export class OutingListComponent implements OnInit {
 
   outings: Outing[];
   outingsSubscription: Subscription;
 
-  constructor(private outingsService: OutingsService, private router: Router) {}
+  constructor(private outingsService: OutingsService, private router: Router) {
+  }
 
   ngOnInit() {
-    this.outingsSubscription = this.outingsService.outingssSubject.subscribe(
-      (outings: Outing[]) => {
-        this.outings = outings;
-        console.log(outings);
-      }
-    );
-    this.outingsService.emitOutings();
+    this.outingsService.getOutings(10, (outings: Outing[]) => {
+      this.outings = outings;
+    });
   }
 
   onNewBook() {
     this.router.navigate(['/outings', 'new']);
   }
 
-  onDeleteBook(outing: Outing) {
-    this.outingsService.removeOuting(outing);
-  }
 
   onViewBook(id: number) {
     this.router.navigate(['/outings', 'view', id]);
-  }
-
-  ngOnDestroy() {
-    this.outingsSubscription.unsubscribe();
   }
 }

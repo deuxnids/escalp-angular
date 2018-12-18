@@ -49,6 +49,8 @@ export class SingleOutingComponent implements OnInit {
             this.danger_dates.push(danger);
             this.dangers.push(book.dangers[danger]);
           });
+
+          this.danger_dates = this.danger_dates.sort();
         }
 
         this.from_stations = [];
