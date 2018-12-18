@@ -57,14 +57,13 @@ export class MapComponent implements OnInit, OnChanges {
       })
     });
 
-    const extent = this.features[0].getGeometry().getExtent();
-    console.log(extent);
+    //const extent = this.features[0].getGeometry().getExtent();
+    const extent = vectorLayer.getSource().getExtent();
     this.map.getView().fit(extent, this.map.getSize());
 
   }
 
   ngOnInit() {
-    //const data = JSON.parse(this.data);
   }
 }
 
