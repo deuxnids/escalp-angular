@@ -38,14 +38,14 @@ export class OutingFormComponent implements OnInit {
   }
 
   onUploadFile(file: File) {
-    this.fileIsUploading = true;
-    this.outingsService.uploadFile(file).then(
-      (url: string) => {
-        this.fileUrl = url;
-        this.fileIsUploading = false;
-        this.fileUploaded = true;
-      }
-    );
+//    this.fileIsUploading = true;
+//    this.outingsService.uploadFile(file).then(
+//      (url: string) => {
+//        this.fileUrl = url;
+//        this.fileIsUploading = false;
+//        this.fileUploaded = true;
+//      }
+//    );
   }
 
   initForm() {
@@ -88,7 +88,7 @@ export class OutingFormComponent implements OnInit {
       outing.photo = this.fileUrl;
     }
 
-    this.outingsService.createNewOuting(outing);
+    //this.outingsService.createNewOuting(outing);
     this.router.navigate(['/outings']);
   }
 
