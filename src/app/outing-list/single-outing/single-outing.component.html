@@ -38,9 +38,9 @@
               à {{outing.pt_connections[item][i]["to"]["location"]["name"]}}
             </dt>
             <dd *ngFor="let i of [0, 1, 2, 3]">
-              {{outing.pt_connections[item][i]["from"]["departure"] | date :"h:mma"}}
+              {{outing.pt_connections[item][i]["from"]["departure"] | date :"hh:mm"}}
               ->
-              {{outing.pt_connections[item][i]["to"]["arrival"] | date :"h:mma"}}
+              {{outing.pt_connections[item][i]["to"]["arrival"] | date :"hh:mm"}}
 
             </dd>
           </dl>
