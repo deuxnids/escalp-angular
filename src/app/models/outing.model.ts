@@ -8,6 +8,7 @@ export class Outing {
   geojson: string;
   dangers: string[];
   pt_connections: string[];
+  weather: any[];
   name: string;
   elevation_min: number;
   elevation_max: number;

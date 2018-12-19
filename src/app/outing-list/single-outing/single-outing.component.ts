@@ -14,6 +14,7 @@ export class SingleOutingComponent implements OnInit {
   dangers: string[];
   danger_dates: string[];
   from_stations: string[];
+  weathers: any[];
   id: string;
   loading: boolean;
   from: string;
@@ -27,6 +28,7 @@ export class SingleOutingComponent implements OnInit {
     this.from = 'Bern';
     this.user = null;
     this.loading = true;
+    this.weathers = [];
     this.outing = new Outing();
     this.id = this.route.snapshot.params['id'];
     if (this.route.snapshot.queryParamMap.has('from')) {
@@ -44,6 +46,10 @@ export class SingleOutingComponent implements OnInit {
         this.dangers = [];
         this.danger_dates = [];
         this.from_stations = [];
+
+        if (typeof(book.weather) !== 'undefined') {
+          this.weathers = book.weather;
+        }
         if (typeof(book.dangers) !== 'undefined') {
           Object.keys(book.dangers).forEach(danger => {
             this.danger_dates.push(danger);
