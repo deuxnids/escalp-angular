@@ -9,32 +9,51 @@ import {Data} from '@angular/router';
 @Injectable()
 export class OutingsService {
 
-
   constructor() {
   }
 
 
-  getOutings(n: number, cb) {
-    firebase.database().ref('/outings').limitToFirst(n)
-      .on('value', (data: DataSnapshot) => {
-          const values = data.val();
-          const keys = Object.keys(values);
+  getOutings(n: number, cb, first_key = null) {
+    let query = firebase.database().ref('/outings').orderByKey().limitToFirst(n);
+    if (first_key !== null) {
+      query = query.startAt(first_key);
+    }
 
-          const outings = keys.map(function (key) {
-            const d = values[key];
-            d['uid'] = key;
-            return d;
-          });
-          cb(outings);
+    query.on('value', (data: DataSnapshot) => {
+        const values = data.val();
+        const keys = Object.keys(values);
+        console.log(keys);
 
-        }
-      );
+        const outings = keys.map(function (key) {
+          const d = values[key];
+          d['uid'] = key;
+          return d;
+        });
+        cb(outings);
+
+      }
+    );
   }
 
   getSingleBook(id: string, cb) {
     firebase.database().ref('/outings/' + id).on('value', (data: DataSnapshot) => {
       cb(data.val());
     });
+  }
+
+
+  getAccess(from: string, route_id: string, cb) {
+    firebase.database().ref('/accesses/' + from + '/' + route_id).on('value', (data: DataSnapshot) => {
+      cb(data.val());
+    });
+  }
+
+  getConditions(id: string, cb) {
+
+    firebase.database().ref('/conditions/' + id).on('value', (data: DataSnapshot) => {
+      cb(data.val());
+    });
+
   }
 
 

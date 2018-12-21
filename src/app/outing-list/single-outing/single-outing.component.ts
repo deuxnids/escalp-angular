@@ -12,8 +12,7 @@ export class SingleOutingComponent implements OnInit {
 
   outing: Outing;
   dangers: string[];
-  danger_dates: string[];
-  from_stations: string[];
+  connections: string[];
   weathers: any[];
   id: string;
   loading: boolean;
@@ -26,10 +25,15 @@ export class SingleOutingComponent implements OnInit {
 
   ngOnInit() {
     this.from = 'Bern';
+
     this.user = null;
     this.loading = true;
+    this.connections = [];
     this.weathers = [];
+    this.dangers = [];
+
     this.outing = new Outing();
+
     this.id = this.route.snapshot.params['id'];
     if (this.route.snapshot.queryParamMap.has('from')) {
       this.from = this.route.snapshot.queryParams['from'];
@@ -39,35 +43,21 @@ export class SingleOutingComponent implements OnInit {
       this.user = this.route.snapshot.queryParams['user'];
     }
 
+
+    this.booksService.getAccess(this.from, this.id, access => {
+      this.connections = access.pt_connections;
+    });
+
+    this.booksService.getConditions(this.id, conditions => {
+      this.dangers = conditions.avalanches;
+      this.weathers = conditions.weather;
+    });
+
+
     this.booksService.getSingleBook(this.id,
       (book: Outing) => {
         this.outing = book;
         this.loading = false;
-        this.dangers = [];
-        this.danger_dates = [];
-        this.from_stations = [];
-
-        if (typeof(book.weather) !== 'undefined') {
-          this.weathers = book.weather;
-        }
-        if (typeof(book.dangers) !== 'undefined') {
-          Object.keys(book.dangers).forEach(danger => {
-            this.danger_dates.push(danger);
-            this.dangers.push(book.dangers[danger]);
-          });
-
-          this.danger_dates = this.danger_dates.sort();
-        }
-
-        this.from_stations = [];
-        if (typeof(book.pt_connections) !== 'undefined') {
-
-          Object.keys(book.pt_connections).forEach(from => {
-            if (this.from == null || this.from === from) {
-              this.from_stations.push(from);
-            }
-          });
-        }
       });
   }
 

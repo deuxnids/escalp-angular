@@ -1,12 +1,12 @@
 <div class="container">
 
-<!--  <div class="row" *ngIf="loading">
-    <div class="col-xs-2 col-xs-offset-5">
+  <!--  <div class="row" *ngIf="loading">
+      <div class="col-xs-2 col-xs-offset-5">
 
-      <mat-spinner></mat-spinner>
+        <mat-spinner></mat-spinner>
+      </div>
     </div>
-  </div>
--->
+  -->
 
   <div class="row" *ngIf="!loading">
     <h1>{{ outing.name }}</h1>
@@ -31,21 +31,12 @@
           </a>
         </div>
         <div class="media-body">
-          <h4 class="media-heading">Accès en transport public</h4>
-
-          <dl *ngFor="let item of from_stations; let i = index" class="dl-horizontal">
-            <dt> de {{outing.pt_connections[item][i]["from"]["location"]["name"]}}
-              à {{outing.pt_connections[item][i]["to"]["location"]["name"]}}
-            </dt>
-            <dd *ngFor="let i of [0, 1, 2, 3]">
-              {{outing.pt_connections[item][i]["from"]["departure"] | date :"hh:mm"}}
-              ->
-              {{outing.pt_connections[item][i]["to"]["arrival"] | date :"hh:mm"}}
-
-            </dd>
-          </dl>
-
-
+          <h4 class="media-heading">Accès en transport public depuis {{from}}</h4>
+          <p *ngFor="let c of connections">
+            {{c["from"]["departure"] | date :"hh:mm"}}
+            ->
+            {{c["to"]["arrival"] | date :"hh:mm"}}
+          </p>
         </div>
       </div>
 
@@ -58,9 +49,9 @@
         </div>
         <div class="media-body">
           <h4 class="media-heading">Avalanche</h4>
-          <p *ngFor="let item of dangers; let i = index">
-            {{danger_dates[i] | date:'medium' }}
-            {{item['dangerlevel']}}
+          <p *ngFor="let avalanche of dangers">
+            {{avalanche["date"] | date:'medium' }}
+            {{avalanche['dangerlevel']}}
           </p>
 
         </div>
@@ -82,8 +73,8 @@
       </div>
 
       <h2>Description</h2>
-      <p>{{outing.description}}</p>
-      <a href={{outing.c2c_url}}>source</a>
+      <p class="text-justify">{{outing.description}}</p>
+      <a href={{outing.source}}>source</a>
 
       <img style="max-width:200px;" *ngIf="outing.photo" [src]="outing.photo"
            onerror="this.src='../../assets/image-placeholder.png'" width="100px">

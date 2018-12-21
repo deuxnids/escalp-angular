@@ -11,11 +11,9 @@ import {HeaderComponent} from './header/header.component';
 import {RouterModule, Routes} from '@angular/router';
 import {OutingListComponent} from './outing-list/outing-list.component';
 import {OutingsService} from './services/outings.service';
-import {OutingFormComponent} from './outing-list/outing-form/outing-form.component';
 import {SingleOutingComponent} from './outing-list/single-outing/single-outing.component';
 import {MapComponent} from './map/map.component';
 import {TransportsService} from './services/transports.service';
-import {WeatherService} from './services/weather.service';
 import {PlanComponent} from './plan/plan.component';
 import {ProfileComponent} from './profile/profile.component';
 import {UsersService} from './services/users.service';
@@ -32,10 +30,7 @@ const appRoutes: Routes = [
   {path: 'auth/signup', component: SignupComponent},
   {path: 'auth/signin', component: SigninComponent},
   {path: 'outings', component: OutingListComponent},
-  {path: 'outings/new', component: OutingFormComponent},
-  {path: 'outings/update/:id', component: OutingFormComponent},
   {path: 'outings/view/:id', component: SingleOutingComponent},
-  {path: 'plan', component: PlanComponent},
   {path: 'profile', component: ProfileComponent},
   {path: '', component: LandingPageComponent},
 ];
@@ -47,7 +42,6 @@ const appRoutes: Routes = [
     SigninComponent,
     HeaderComponent,
     OutingListComponent,
-    OutingFormComponent,
     SingleOutingComponent,
     MapComponent,
     PlanComponent,
@@ -67,7 +61,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule
 
   ],
-  providers: [AuthService, OutingsService, TransportsService, WeatherService, UsersService, PlannerService],
+  providers: [AuthService, OutingsService, TransportsService, UsersService, PlannerService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
