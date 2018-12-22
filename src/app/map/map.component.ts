@@ -35,6 +35,10 @@ export class MapComponent implements OnInit {
     this.features = (new this.ol.format.GeoJSON()).readFeatures(features);
     const layer = this.ga.layer.create('ch.swisstopo.pixelkarte-farbe');
     const pt_layer = this.ga.layer.create('ch.bav.haltestellen-oev');
+    const slopes = this.ga.layer.create('ch.swisstopo-karto.hangneigung');
+
+    // 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo-karto.skitouren/default/current/3857/{z}/{x}/{y}.png'
+    const ski_layer = getLayer();
 
     const vectorLayer = new this.ol.layer.Vector({
       source: new this.ol.source.Vector({
@@ -50,7 +54,7 @@ export class MapComponent implements OnInit {
 
     this.map = new this.ga.Map({
       target: 'map',
-      layers: [layer, pt_layer, vectorLayer, vectorLayerStops],
+      layers: [layer, pt_layer, vectorLayer, vectorLayerStops, slopes, ski_layer],
       view: new this.ol.View({
         resolution: 100,
         center: [2670000, 1160000]
@@ -120,3 +124,51 @@ const styleFunction = function (feature) {
 };
 
 
+const getLayer = function () {
+
+  const ol = window['ol'];
+
+  // The ol.layer
+
+
+  const RESOLUTIONS = [
+    4000, 3750, 3500, 3250, 3000, 2750, 2500, 2250, 2000, 1750, 1500, 1250,
+    1000, 750, 650, 500, 250, 100, 50, 20, 10, 5, 2.5, 2, 1.5, 1, 0.5
+  ];
+  const extent = [2420000, 130000, 2900000, 1350000];
+  const projection = ol.proj.get('EPSG:2056');
+  projection.setExtent(extent);
+
+
+  const matrixIds = [];
+  for (let i = 0; i < RESOLUTIONS.length; i++) {
+    matrixIds.push(i);
+  }
+
+
+  const tileGrid = new ol.tilegrid.WMTS({
+    origin: [extent[0], extent[3]],
+    resolutions: RESOLUTIONS,
+    matrixIds: matrixIds
+  });
+
+  const ski_layer = new ol.layer.Tile({
+    source: new ol.source.WMTS({
+      attributions: [new ol.Attribution({
+        html: '&copy; ' +
+        '<a href="http://www.geo.admin.ch/internet/geoportal/' +
+        'en/home.html">' +
+        'geo.admin.ch</a>'
+      })],
+      url: 'https://wmts.geo.admin.ch/1.0.0/{Layer}/default/current/2056/{TileMatrix}/{TileCol}/{TileRow}.png',
+      tileGrid: tileGrid,
+      layer: 'ch.swisstopo-karto.skitouren',
+      requestEncoding: 'REST',
+      projection: projection,
+    }),
+    opacity: 0.5
+  });
+
+  return ski_layer;
+
+};
