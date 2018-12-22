@@ -56,5 +56,11 @@ export class OutingsService {
 
   }
 
+  getGeo(id: string, cb) {
+    firebase.database().ref('/geo/' + id).on('value', (data: DataSnapshot) => {
+      cb(data.val());
+    });
+
+  }
 
 }

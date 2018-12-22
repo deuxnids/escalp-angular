@@ -1,4 +1,5 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {OutingsService} from '../services/outings.service';
 
 
 @Component({
@@ -8,26 +9,25 @@ import {Component, Input, OnChanges, OnInit} from '@angular/core';
 })
 
 
-export class MapComponent implements OnInit, OnChanges {
+export class MapComponent implements OnInit {
 
   ga = window['ga'];
   ol = window['ol'];
   map;
   features;
   data;
-  data2;
-  @Input('geojson') geojson;
+  @Input('id') id;
 
 
-  constructor() {
+  constructor(private booksService: OutingsService) {
     this.data = {};
   }
 
 
-  ngOnChanges() {
-    if (this.geojson !== undefined) {
-      this.draw(this.geojson);
-    }
+  ngOnInit() {
+    this.booksService.getGeo(this.id, geo => {
+      this.draw(geo);
+    });
   }
 
   draw(features) {
@@ -50,7 +50,7 @@ export class MapComponent implements OnInit, OnChanges {
 
     this.map = new this.ga.Map({
       target: 'map',
-      layers: [layer, vectorLayer, vectorLayerStops, pt_layer],
+      layers: [layer, pt_layer, vectorLayer, vectorLayerStops],
       view: new this.ol.View({
         resolution: 100,
         center: [2670000, 1160000]
@@ -62,39 +62,61 @@ export class MapComponent implements OnInit, OnChanges {
 
   }
 
-  ngOnInit() {
-  }
 }
 
 
 const styleFunction = function (feature) {
   const ol = window['ol'];
 
-  const styles = {
 
-    'Point': [new ol.style.Style({
-      image: new ol.style.Circle({
-        radius: 10,
-        fill: new ol.style.Fill({
-          color: 'blue'
-        })
-      })
-    })],
-
-    'LineString': new ol.style.Style({
-      stroke: new ol.style.Stroke({
-        color: 'green',
-        width: 10
-      })
-    }),
-    'MultiLineString': new ol.style.Style({
-      stroke: new ol.style.Stroke({
-        color: 'red',
-        width: 10
-      })
+  const pt_style = new ol.style.Style({
+    image: new ol.style.Icon({
+      anchor: [0.5, 0.5],
+      //size: [52, 52],
+      //offset: [52, 0],
+      opacity: 1,
+      scale: 0.05,
+      src: 'assets/icone_bus_noir-01.png'
     })
+  });
+
+
+  const waypoint_style = new ol.style.Style({
+    image: new ol.style.Icon({
+      anchor: [0.0, 0.5],
+      opacity: 1,
+      scale: 0.2,
+      src: 'assets/wp.png'
+    })
+  });
+
+
+  const route_style = new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: 'red',
+      width: 4
+    })
+  });
+
+
+  const styles = {
+    'Point': [waypoint_style],
+    'LineString': route_style,
+    'MultiLineString': route_style
   };
+
+  if (feature.getGeometry().getType() === 'LineString') {
+    return route_style;
+  }
+
+  if (feature.getProperties()['type'] === 'wp') {
+    return waypoint_style;
+  }
+  if (feature.getProperties()['type'] === 'pt') {
+    return pt_style;
+  }
 
   return styles[feature.getGeometry().getType()];
 };
+
 
