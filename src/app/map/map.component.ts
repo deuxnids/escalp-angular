@@ -166,7 +166,7 @@ const getLayer = function () {
       requestEncoding: 'REST',
       projection: projection,
     }),
-    opacity: 0.5
+    opacity: 1.0
   });
 
   return ski_layer;
