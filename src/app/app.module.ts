@@ -24,6 +24,8 @@ import {
 } from '@angular/material';
 import {PlannerService} from './services/planner.service';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 
 const appRoutes: Routes = [
@@ -58,7 +60,8 @@ const appRoutes: Routes = [
     MatButtonModule, MatCheckboxModule,
     MatFormFieldModule, MatOptionModule, MatSelectModule,
     MatInputModule, MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, MatProgressSpinnerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgbModule.forRoot(),
 
   ],
   providers: [AuthService, OutingsService, TransportsService, UsersService, PlannerService],

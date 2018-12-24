@@ -1,9 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Outing} from '../models/outing.model';
-import {Subject} from 'rxjs';
 import * as firebase from 'firebase/app';
 import {DataSnapshot} from 'firebase/database';
-import {Data} from '@angular/router';
 
 
 @Injectable()
@@ -22,7 +19,6 @@ export class OutingsService {
     query.on('value', (data: DataSnapshot) => {
         const values = data.val();
         const keys = Object.keys(values);
-        console.log(keys);
 
         const outings = keys.map(function (key) {
           const d = values[key];
@@ -60,7 +56,13 @@ export class OutingsService {
     firebase.database().ref('/geo/' + id).on('value', (data: DataSnapshot) => {
       cb(data.val());
     });
-
   }
+
+  getReco(id: string, cb) {
+    firebase.database().ref('/recommandations/' + id + '/scores').orderByChild('score').limitToLast(50).on('value', (data: DataSnapshot) => {
+      cb(data.val());
+    });
+  }
+
 
 }

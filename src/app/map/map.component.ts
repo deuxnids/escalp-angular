@@ -53,7 +53,7 @@ export class MapComponent implements OnInit {
     });
 
     this.map = new this.ga.Map({
-      target: 'map',
+      target: 'map-' + this.id,
       layers: [layer, pt_layer, vectorLayer, vectorLayerStops, slopes, ski_layer],
       view: new this.ol.View({
         resolution: 100,

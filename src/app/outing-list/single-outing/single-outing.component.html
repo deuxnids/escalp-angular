@@ -1,92 +1,73 @@
-<div class="container">
+<section class="py-5">
+  <div class="container">
 
-  <!--  <div class="row" *ngIf="loading">
-      <div class="col-xs-2 col-xs-offset-5">
 
-        <mat-spinner></mat-spinner>
-      </div>
-    </div>
-  -->
-
-  <div class="row" *ngIf="!loading">
     <h1>{{ outing.name }}</h1>
-    <div class="col-md-6">
+    <!--  <div class="row" *ngIf="loading">
+        <div class="col-xs-2 col-xs-offset-5">
 
-      <div class="media">
-        <div class="media-left">
-          <a href="#">
-            <img class="media-object" src="assets/elevation.png" alt="..." style="width: 64px; height: 64px;">
-          </a>
-        </div>
-        <div class="media-body">
-          <h4 class="media-heading">Dénivelé</h4>
-          <p>{{outing.elevation_min}} -> {{outing.elevation_max}} = {{outing.height_diff_up}}</p>
+          <mat-spinner></mat-spinner>
         </div>
       </div>
+    -->
 
-      <div class="media">
-        <div class="media-left">
-          <a href="#">
-            <img class="media-object" src="assets/icone_bus_noir-01.png" alt="..." style="width: 64px; height: 64px;">
-          </a>
-        </div>
-        <div class="media-body">
-          <h4 class="media-heading">Accès en transport public depuis {{from}}</h4>
-          <p *ngFor="let c of connections">
-            {{c["from"]["departure"] | date :"hh:mm"}}
-            ->
-            {{c["to"]["arrival"] | date :"hh:mm"}}
-          </p>
-        </div>
-      </div>
+    <div class="row" *ngIf="!loading">
+      <div class="col-md-6">
 
 
-      <div class="media">
-        <div class="media-left">
-          <a href="#">
-            <img class="media-object" src="assets/avalanche.png" alt="..." style="width: 64px; height: 64px;">
-          </a>
-        </div>
-        <div class="media-body">
-          <h4 class="media-heading">Avalanche</h4>
-          <p *ngFor="let avalanche of dangers">
-            {{avalanche["date"] | date:'medium' }}
-            {{avalanche['dangerlevel']}}
-          </p>
+        <ul class="list-unstyled">
+          <li class="media">
 
-        </div>
-      </div>
+            <img class="mr-3" src="assets/elevation.png" alt="..." style="width: 64px; height: 64px;">
+            <div class="media-body">
+              <h5 class="mt-0 mb-1">Dénivelé</h5>
 
-      <div class="media">
-        <div class="media-body">
-          <div class="row text-center">
-            <div class="col-xs-1"></div>
-            <div class="col-xs-2" *ngFor="let weather of weathers">
-              <figure>
-                <img src="http://openweathermap.org/img/w/{{weather.icon}}.png" style="width: 64px; height: 64px;">
-                <figcaption>{{weather.day}}</figcaption>
-              </figure>
+              {{outing.elevation_min}} -> {{outing.elevation_max}} = {{outing.height_diff_up}}
             </div>
-            <div class="col-xs-1"></div>
-          </div>
-        </div>
+          </li>
+          <li class="media my-4">
+
+            <img class="mr-3" src="assets/icone_bus_noir-01.png" alt="..." style="width: 64px; height: 64px;">
+            <div class="media-body">
+              <h5 class="mt-0 mb-1">Accès en transport public depuis {{from}}</h5>
+              <span *ngFor="let c of connections">
+                {{c["from"]["departure"] | date :"hh:mm"}}
+                ->
+                {{c["to"]["arrival"] | date :"hh:mm"}}
+              </span>
+
+            </div>
+          </li>
+          <li class="media">
+            <img class="mr-3" src="assets/avalanche.png" alt="..." style="width: 64px; height: 64px;">
+            <div class="media-body">
+              <h5 class="mt-0 mb-1">Avalanche</h5>
+              <p *ngFor="let avalanche of dangers">
+                {{avalanche["date"] | date:'medium' }}
+                {{avalanche['dangerlevel']}}
+              </p>
+
+            </div>
+          </li>
+        </ul>
+
+
+        <h2>Description</h2>
+        <p class="text-justify">{{outing.description}}</p>
+        <a href={{outing.source}}>source</a>
+
+        <img style="max-width:200px;" *ngIf="outing.photo" [src]="outing.photo"
+             onerror="this.src='../../assets/image-placeholder.png'" width="100px">
       </div>
 
-      <h2>Description</h2>
-      <p class="text-justify">{{outing.description}}</p>
-      <a href={{outing.source}}>source</a>
 
-      <img style="max-width:200px;" *ngIf="outing.photo" [src]="outing.photo"
-           onerror="this.src='../../assets/image-placeholder.png'" width="100px">
+      <div class="col-md-6">
+        <app-map [id]="id"></app-map>
+      </div>
+
     </div>
 
-
-    <div class="col-md-6">
-      <app-map [id]="id"></app-map>
-    </div>
 
   </div>
 
-
-</div>
-
+</section>
