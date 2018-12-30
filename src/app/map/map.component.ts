@@ -16,6 +16,7 @@ export class MapComponent implements OnInit {
   map;
   features;
   data;
+  @Input('with_pt_layer') with_pt_layer: boolean;
   @Input('id') id;
 
 
@@ -52,9 +53,19 @@ export class MapComponent implements OnInit {
       }),
     });
 
+    const layers = [layer];
+    if (this.with_pt_layer) {
+      layers.push(pt_layer);
+    }
+    layers.push(vectorLayer);
+    layers.push(vectorLayerStops);
+    layers.push(slopes);
+    layers.push(ski_layer);
+
+
     this.map = new this.ga.Map({
       target: 'map-' + this.id,
-      layers: [layer, pt_layer, vectorLayer, vectorLayerStops, slopes, ski_layer],
+      layers: layers,
       view: new this.ol.View({
         resolution: 100,
         center: [2670000, 1160000]
