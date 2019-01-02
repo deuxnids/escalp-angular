@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {OutingsService} from '../services/outings.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Outing} from '../models/outing.model';
 import {Subscription} from 'rxjs';
 
@@ -11,15 +11,28 @@ import {Subscription} from 'rxjs';
 })
 export class OutingListComponent implements OnInit {
 
+  p_id;
   outings: any[];
+  user: String;
+  station: String;
   outingsSubscription: Subscription;
 
-  constructor(private outingsService: OutingsService, private router: Router) {
+  constructor(private route: ActivatedRoute, private outingsService: OutingsService, private router: Router) {
   }
 
   ngOnInit() {
+
+    this.p_id = this.route.snapshot.params['p_id'];
     this.outings = [];
-    this.outingsService.getReco('fdc0250bbb251d504e7d2e4457750e6a', data => {
+
+
+    this.outingsService.getRecoUser(this.p_id, data => {
+      this.user = data['FNAME'] + ' ' + data['LNAME'];
+      this.station = data['STATION'];
+    });
+
+    this.outingsService.getReco(this.p_id, data => {
+
       Object.keys(data).forEach(d => {
         this.outingsService.getSingleBook(data[d]['route'], route => {
           route.uid = data[d]['route'];
@@ -39,6 +52,6 @@ export class OutingListComponent implements OnInit {
 
 
   onViewBook(id: number) {
-    this.router.navigate(['/outings', 'view', id]);
+    this.router.navigate(['/outings', this.p_id, id]);
   }
 }

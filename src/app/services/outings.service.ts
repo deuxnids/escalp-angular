@@ -64,5 +64,10 @@ export class OutingsService {
     });
   }
 
+  getRecoUser(id: string, cb) {
+    firebase.database().ref('/recommandations/' + id + '/user').on('value', (data: DataSnapshot) => {
+      cb(data.val());
+    });
+  }
 
 }

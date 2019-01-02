@@ -32,8 +32,8 @@ import {JsonpModule} from '@angular/http';
 const appRoutes: Routes = [
   {path: 'auth/signup', component: SignupComponent},
   {path: 'auth/signin', component: SigninComponent},
-  {path: 'outings', component: OutingListComponent},
-  {path: 'outings/view/:id', component: SingleOutingComponent},
+  {path: 'outings/:p_id', component: OutingListComponent},
+  {path: 'outings/:p_id/:id', component: SingleOutingComponent},
   {path: 'profile', component: ProfileComponent},
   {path: '', component: LandingPageComponent},
 ];

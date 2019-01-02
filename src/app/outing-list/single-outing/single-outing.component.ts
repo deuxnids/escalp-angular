@@ -15,6 +15,7 @@ export class SingleOutingComponent implements OnInit {
   connections: string[];
   weathers: any[];
   id: string;
+  p_id: string;
   loading: boolean;
   from: string;
   user: string;
@@ -35,13 +36,12 @@ export class SingleOutingComponent implements OnInit {
     this.outing = new Outing();
 
     this.id = this.route.snapshot.params['id'];
-    if (this.route.snapshot.queryParamMap.has('from')) {
-      this.from = this.route.snapshot.queryParams['from'];
-    }
+    this.p_id = this.route.snapshot.params['p_id'];
 
-    if (this.route.snapshot.queryParamMap.has('user')) {
-      this.user = this.route.snapshot.queryParams['user'];
-    }
+    this.booksService.getRecoUser(this.p_id, data => {
+      this.user = data['FNAME'] + ' ' + data['LNAME'];
+      this.from = data['STATION'];
+    });
 
 
     this.booksService.getAccess(this.from, this.id, access => {
