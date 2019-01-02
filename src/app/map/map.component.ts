@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, OnInit} from '@angular/core';
 import {OutingsService} from '../services/outings.service';
 
 
@@ -9,7 +9,7 @@ import {OutingsService} from '../services/outings.service';
 })
 
 
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, AfterViewInit {
 
   ga = window['ga'];
   ol = window['ol'];
@@ -24,8 +24,10 @@ export class MapComponent implements OnInit {
     this.data = {};
   }
 
-
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
     this.booksService.getGeo(this.id, geo => {
       this.draw(geo);
     });
