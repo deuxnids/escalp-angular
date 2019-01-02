@@ -1,0 +1,35 @@
+<form [formGroup]="profileForm" (ngSubmit)="submit()">
+
+  <div class="form-group">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Email" formControlName="email">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Prénom" formControlName="firstName">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Nom" formControlName="lastName">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput [matAutocomplete]="auto" formControlName='ptStop'
+             placeholder="Arrêt transport public (le plus proche du domicile) ">
+    </mat-form-field>
+
+
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let station of filteredStations" [value]="station.name">
+        <span>{{ station.name }}</span>
+      </mat-option>
+    </mat-autocomplete>
+
+
+    <input type="submit" value="s'inscrire" name="subscribe" id="mc-embedded-subscribe"
+           class="btn btn-primary" [disabled]="!profileForm.valid">
+
+  </div>
+</form>
+
+

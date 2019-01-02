@@ -4,7 +4,7 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {SignupComponent} from './auth/signup/signup.component';
 import {SigninComponent} from './auth/signin/signin.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientJsonpModule, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AuthService} from './services/auth.service';
 import {HeaderComponent} from './header/header.component';
@@ -23,9 +23,10 @@ import {
   MatDatepickerModule, MatNativeDateModule, MatProgressSpinnerModule
 } from '@angular/material';
 import {PlannerService} from './services/planner.service';
-import { LandingPageComponent } from './landing-page/landing-page.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
+import {LandingPageComponent} from './landing-page/landing-page.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {SignupFormComponent} from './signup-form/signup-form.component';
+import {JsonpModule} from '@angular/http';
 
 
 const appRoutes: Routes = [
@@ -48,7 +49,8 @@ const appRoutes: Routes = [
     MapComponent,
     PlanComponent,
     ProfileComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    SignupFormComponent
   ],
   imports: [
     BrowserModule,
@@ -62,6 +64,7 @@ const appRoutes: Routes = [
     MatInputModule, MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, MatProgressSpinnerModule,
     ReactiveFormsModule,
     NgbModule.forRoot(),
+    HttpClientJsonpModule
 
   ],
   providers: [AuthService, OutingsService, TransportsService, UsersService, PlannerService],
