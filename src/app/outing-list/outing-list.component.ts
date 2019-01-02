@@ -19,7 +19,7 @@ export class OutingListComponent implements OnInit {
 
   ngOnInit() {
     this.outings = [];
-    this.outingsService.getReco('2f18410078377d0ce0283e620f9a2aaa', data => {
+    this.outingsService.getReco('fdc0250bbb251d504e7d2e4457750e6a', data => {
       Object.keys(data).forEach(d => {
         this.outingsService.getSingleBook(data[d]['route'], route => {
           route.uid = data[d]['route'];
