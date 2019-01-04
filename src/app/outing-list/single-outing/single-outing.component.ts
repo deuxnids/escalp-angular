@@ -19,6 +19,7 @@ export class SingleOutingComponent implements OnInit {
   loading: boolean;
   from: string;
   user: string;
+  source: string;
 
   constructor(private route: ActivatedRoute, private booksService: OutingsService,
               private router: Router) {
@@ -58,6 +59,9 @@ export class SingleOutingComponent implements OnInit {
       (book: Outing) => {
         this.outing = book;
         this.loading = false;
+        const urls = this.outing.source.split('/');
+        this.source = urls[urls.length - 1];
+        this.source = 'https://www.camptocamp.org/routes/' + this.source;
       });
   }
 

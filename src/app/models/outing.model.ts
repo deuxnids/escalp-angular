@@ -10,6 +10,7 @@ export class Outing {
   pt_connections: string[];
   weather: any[];
   name: string;
+  source: string;
   elevation_min: number;
   elevation_max: number;
   height_diff_up: number;

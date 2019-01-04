@@ -68,7 +68,10 @@
 
         <h2>Description</h2>
         <p class="text-justify">{{outing.description}}</p>
-        <a href={{outing.source}}>source</a>
+
+
+        <a href="http://creativecommons.org/licenses/by-sa/3.0/deed.en"><img
+          src="http://i.creativecommons.org/l/by-sa/3.0/80x15.png"/></a> <a href="{{source}}" target="_blank">camptocamp.org</a>
 
         <img style="max-width:200px;" *ngIf="outing.photo" [src]="outing.photo"
              onerror="this.src='../../assets/image-placeholder.png'" width="100px">
