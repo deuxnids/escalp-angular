@@ -12,7 +12,7 @@ export class SingleOutingComponent implements OnInit {
 
   outing: Outing;
   dangers: string[];
-  connections: string[];
+  access: any;
   weathers: any[];
   id: string;
   p_id: string;
@@ -30,7 +30,6 @@ export class SingleOutingComponent implements OnInit {
 
     this.user = null;
     this.loading = true;
-    this.connections = [];
     this.weathers = [];
     this.dangers = [];
 
@@ -46,7 +45,7 @@ export class SingleOutingComponent implements OnInit {
 
 
     this.booksService.getAccess(this.from, this.id, access => {
-      this.connections = access.pt_connections;
+      this.access = access;
     });
 
     this.booksService.getConditions(this.id, conditions => {

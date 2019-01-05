@@ -43,7 +43,17 @@
 
             <img class="mr-3" src="assets/icone_bus_noir-01.png" alt="..." style="width: 64px; height: 64px;">
             <div class="media-body">
-              <h5 class="mt-0 mb-1">Accès en transport public depuis {{from}}</h5>
+              <h5 class="mt-0 mb-1">Accès depuis {{from}}</h5>
+              <ul>
+                <li>Voiture: 45 min</li>
+                <li>Transport public (Arolla Poste):</li>
+                <ul>
+                  <li>le plus rapide: 55 min</li>
+                  <li>le plus tôt: 08h33->09h34</li>
+                </ul>
+
+
+              </ul>
               <span *ngFor="let c of connections">
                 {{c["from"]["departure"] | date :"hh:mm"}}
                 ->
