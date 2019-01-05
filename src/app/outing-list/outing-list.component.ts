@@ -3,6 +3,7 @@ import {OutingsService} from '../services/outings.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Outing} from '../models/outing.model';
 import {Subscription} from 'rxjs';
+import {UsersService} from '../services/users.service';
 
 @Component({
   selector: 'app-outing-list',
@@ -15,14 +16,15 @@ export class OutingListComponent implements OnInit {
   outings: any[];
   user: String;
   station: String;
-  outingsSubscription: Subscription;
 
-  constructor(private route: ActivatedRoute, private outingsService: OutingsService, private router: Router) {
+  constructor(private route: ActivatedRoute, private outingsService: OutingsService, private router: Router,
+              private userService: UsersService) {
   }
 
   ngOnInit() {
 
     this.p_id = this.route.snapshot.params['p_id'];
+    this.userService.saveToken(this.p_id);
     this.outings = [];
 
 

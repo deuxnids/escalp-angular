@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../services/auth.service';
 import * as firebase from 'firebase';
+import {Router} from '@angular/router';
+import {UsersService} from '../services/users.service';
 
 @Component({
   selector: 'app-header',
@@ -10,8 +12,9 @@ import * as firebase from 'firebase';
 export class HeaderComponent implements OnInit {
 
   isAuth: boolean;
+  token = 'fdc0250bbb251d504e7d2e4457750e6a';
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private userService: UsersService) {
   }
 
   ngOnInit() {
@@ -24,6 +27,11 @@ export class HeaderComponent implements OnInit {
         }
       }
     );
+
+    this.userService.tokenSubject.subscribe(token => {
+      this.token = token;
+    });
+
   }
 
   onSignOut() {
