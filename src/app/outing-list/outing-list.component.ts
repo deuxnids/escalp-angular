@@ -14,8 +14,8 @@ export class OutingListComponent implements OnInit {
 
   p_id;
   outings: any[];
-  user: String;
-  station: String;
+  user: string;
+  station: string;
 
   constructor(private route: ActivatedRoute, private outingsService: OutingsService, private router: Router,
               private userService: UsersService) {
@@ -28,23 +28,42 @@ export class OutingListComponent implements OnInit {
     this.outings = [];
 
 
-    this.outingsService.getRecoUser(this.p_id, data => {
-      this.user = data['FNAME'] + ' ' + data['LNAME'];
-      this.station = data['STATION'];
-    });
+    this.outingsService.getRecoUser(this.p_id, user => {
+      this.user = user['FNAME'] + ' ' + user['LNAME'];
+      this.station = user['STATION'];
 
-    this.outingsService.getReco(this.p_id, data => {
+      this.outingsService.getReco(this.p_id, data => {
 
-      Object.keys(data).forEach(d => {
-        this.outingsService.getSingleBook(data[d]['route'], route => {
-          route.uid = data[d]['route'];
-          route.score = data[d]['score'];
-          this.outings.push(route);
-          this.outings = this.outings.sort((a, b) => (a.score < b.score) ? 1 : -1);
+        Object.keys(data).forEach(d => {
 
+
+          this.outingsService.getSingleBook(data[d]['route'], route => {
+            route.uid = data[d]['route'];
+            route.score = data[d]['score'];
+
+
+            this.outingsService.getAccess(this.station, route.uid, access => {
+              if (access != null) {
+                route.pt_duration = access['pt_duration'];
+                route.car_duration = access['car_duration'];
+              } else {
+                route.pt_duration = 0;
+                route.car_duration = 0;
+              }
+            });
+
+
+            this.outings.push(route);
+
+            this.outings = this.outings.sort((a, b) => (a.score < b.score) ? 1 : -1);
+
+          });
         });
       });
+
+
     });
+
 
   }
 

@@ -25,10 +25,13 @@
                 <p class="card-text">{{ book.name }}</p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
-                    <button type="button" (click)="onViewBook(book.uid)" class="btn btn-sm btn-outline-secondary">Découvrir
+                    <button type="button" (click)="onViewBook(book.uid)" class="btn btn-sm btn-outline-secondary">
+                      Découvrir
                     </button>
                   </div>
-                  <small class="text-muted">{{book.score | number:'1.0-1'}}</small>
+                  <small class="text-muted"> voiture: {{book.car_duration | number:'1.0-0'}} min | tp:
+                    {{book.pt_duration | number:'1.0-0'}} min | score: {{book.score | number:'1.0-1'}}
+                  </small>
                 </div>
               </div>
             </div>
