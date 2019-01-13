@@ -7,15 +7,22 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item"  *ngIf="user">
+        <li class="nav-item" *ngIf="user">
           <a routerLink="profile" class="nav-link">Profil de {{user.first_name}}</a>
         </li>
 
 
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="isAuth">
           <a routerLink="outings" class="nav-link">Propositions de courses</a>
         </li>
 
+        <li class="nav-item" *ngIf="isAuth">
+          <div (click)="signOut()" class="nav-link" style="cursor: pointer;">Se déconnecter</div>
+        </li>
+
+        <li class="nav-item" *ngIf="!isAuth">
+          <a routerLink="signin" class="nav-link" style="cursor: pointer;">Se connecter</a>
+        </li>
 
       </ul>
     </div>

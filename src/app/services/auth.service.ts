@@ -48,4 +48,9 @@ export class AuthService {
   signOutUser() {
     firebase.auth().signOut();
   }
+
+  sendPasswordResetEmail(email) {
+    firebase.auth().sendPasswordResetEmail(email);
+
+  }
 }

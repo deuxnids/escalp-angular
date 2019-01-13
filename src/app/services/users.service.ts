@@ -13,16 +13,17 @@ export class UsersService {
 
 
   constructor() {
+    this.onAuthStateChanged();
+  }
 
-    firebase.database().ref('users/' + 'skMxTbf6gedeciwyEfxUwe7Dacs1').on('value', (data) => {
+  loadDefaultUser() {
+    firebase.database().ref('users/' + 'skMxTbf6gedeciwyEfxUwe7Dacs1').once('value', (data) => {
       if (data.val() !== undefined) {
         this.user = data.val();
         this.emitUser();
         this.onAuthStateChanged();
       }
     });
-
-
   }
 
   saveToken(token: String) {
@@ -46,15 +47,35 @@ export class UsersService {
     firebase.auth().onAuthStateChanged(authUser => {
       if (authUser !== null) {
         this.uid = authUser.uid;
+        console.log(this.uid);
         this.getUser(this.uid);
       }
     });
   }
 
+  setHIde(r_id, value) {
+    const uid = firebase.auth().currentUser.uid;
+    firebase.database().ref('users/' + uid + '/hides/' + r_id).set({'value': value});
+
+  }
+
+  getNotToShow() {
+
+  }
+
+  setToDo(r_id, value) {
+    const uid = firebase.auth().currentUser.uid;
+    firebase.database().ref('users/' + uid + '/todos/' + r_id).set({'value': value});
+  }
+
+  getToDos() {
+
+  }
+
   getUser(uid) {
 
 
-    firebase.database().ref('users/' + uid).on('value', (data) => {
+    firebase.database().ref('users/' + uid).once('value', (data) => {
       if (data.val() !== undefined) {
 
         this.user = data.val();
@@ -62,6 +83,10 @@ export class UsersService {
       }
     });
 
+  }
+
+  signout() {
+    firebase.auth().signOut();
   }
 }
 

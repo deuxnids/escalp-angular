@@ -45,12 +45,12 @@
             <div class="media-body">
               <h5 class="mt-0 mb-1">Accès depuis {{user.origin}}</h5>
               <ul>
-                <li>Voiture: {{outing.accessibility[user.origin].car_duration | number:'1.0-0'}} min</li>
-                <li>Transports publics ({{ outing.accessibility[user.origin].pt_to }}):</li>
+                <li>Voiture: {{outing.car_duration | number:'1.0-0'}} min</li>
+                <li>Transports publics ({{ outing.pt_to }}):</li>
                 <ul>
-                  <li>le plus rapide: {{ outing.accessibility[user.origin].pt_duration | number:'1.0-0'}} min</li>
-                  <li>le plus tôt: {{outing.accessibility[user.origin].pt_departure | date :"hh:mm"}}->
-                    {{outing.accessibility[user.origin].pt_arrival | date :"hh:mm"}}
+                  <li>le plus rapide: {{ outing.pt_duration | number:'1.0-0'}} min</li>
+                  <li>le plus tôt: {{outing.pt_departure | date :"hh:mm"}}->
+                    {{outing.pt_arrival | date :"hh:mm"}}
                   </li>
                 </ul>
 

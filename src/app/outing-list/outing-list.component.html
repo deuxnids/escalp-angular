@@ -5,11 +5,67 @@
 
     <h4 *ngIf="!loading">{{user.first_name}}, au départ de {{user.origin}}</h4>
 
-    <div class="album py-5 bg-light">
-      <div class="container">
+    <div aria-label="breadcrumb">
+      <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
+          Filtrer
+        </button>
+        <div class="dropdown-menu">
+          <div class="dropdown-item" style="cursor: pointer;"
+               (click)="filterBy('none')">Pas de filtre
+          </div>
+          <div class="dropdown-item" style="cursor: pointer;"
+               (click)="filterBy('hide')">Ne plus voir
+          </div>
+          <div class="dropdown-item" style="cursor: pointer;"
+               (click)="filterBy('todo')">A faire
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
+          Trier
+        </button>
+        <div class="dropdown-menu">
+          <div class="dropdown-item" style="cursor: pointer;"
+               (click)="sortBy('pt')">TP
+          </div>
+          <div class="dropdown-item" style="cursor: pointer;"
+               (click)="sortBy('car')">Voiture
+          </div>
+
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-item" style="cursor: pointer;"
+               (click)="sortBy('den')">Dénivelé
+          </div>
+          <div class="dropdown-item" style="cursor: pointer;"
+               (click)="sortBy('altitude_min')">Altitude min
+          </div>
+          <div class="dropdown-item" style="cursor: pointer;"
+               (click)="sortBy('altitude_max')" href="#">Altitude max
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="py-5">
+
+      <!-- Example single danger button -->
+
+
+      <div class="album py-5 bg-light">
+
 
         <div class="row">
-          <div class="col-md-6" *ngFor="let book of outings">
+          <div class="col-md-6" *ngFor="let book of filtered_outings">
             <div class="card mb-4 shadow-sm">
               <!--
               <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg"
@@ -23,17 +79,38 @@
               <app-map [id]="book.uid" [with_pt_layer]=false></app-map>
               <div class="card-body">
                 <p class="card-text">{{ book.name }}</p>
+                <small class="text-muted"> voiture: {{book.car_duration | number:'1.0-0'}}
+                  min | tp:
+                  {{book.pt_duration | number:'1.0-0'}} min | score: {{book.score |
+                  number:'1.0-1'}}
+                </small>
                 <div class="d-flex justify-content-between align-items-center">
+
+
                   <div class="btn-group">
-                    <button type="button" (click)="onViewBook(book.uid)" class="btn btn-sm btn-outline-secondary">
-                      Découvrir
+                    <a class="btn btn-sm btn-outline-secondary" target="_blank" href="outings/{{book.uid}}"
+                       role="button">Découvrir</a>
+
+                    <button type="button" *ngIf="!book.hide" (click)="setHide(book, true)"
+                            class="btn btn-sm btn-outline-secondary">
+                      Ne plus voir
                     </button>
+                    <button type="button" *ngIf="book.hide" (click)="setHide(book, false)"
+                            class="btn btn-sm btn-secondary">
+                      Ne plus voir
+                    </button>
+
+                    <button *ngIf="!book.todo" type="button" (click)="toDo(book, true)"
+                            class="btn btn-sm btn-outline-secondary">
+                      A faire
+                    </button>
+                    <button *ngIf="book.todo" type="button" (click)="toDo(book, false)"
+                            class="btn btn-sm btn-secondary">
+                      A faire
+                    </button>
+
                   </div>
-                  <small class="text-muted"> voiture: {{book.accessibility[user.origin].car_duration | number:'1.0-0'}}
-                    min | tp:
-                    {{book.accessibility[user.origin].pt_duration | number:'1.0-0'}} min | score: {{book.score |
-                    number:'1.0-1'}}
-                  </small>
+
                 </div>
               </div>
             </div>

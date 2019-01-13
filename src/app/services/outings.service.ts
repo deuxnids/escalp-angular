@@ -1,6 +1,9 @@
 import {Injectable} from '@angular/core';
 import * as firebase from 'firebase/app';
 import {DataSnapshot} from 'firebase/database';
+import {rxSubscriber} from 'rxjs/internal/symbol/rxSubscriber';
+import {Book} from '../models/book.model';
+import {Outing} from '../models/outing.model';
 
 
 @Injectable()
@@ -10,51 +13,106 @@ export class OutingsService {
   }
 
 
-  getOutings(n: number, cb, first_key = null) {
-    let query = firebase.database().ref('/outings').orderByKey().limitToFirst(n);
-    if (first_key !== null) {
-      query = query.startAt(first_key);
-    }
+  getRoutesBy(user, attribute, ascending = true) {
 
-    query.on('value', (data: DataSnapshot) => {
-        const values = data.val();
-        const keys = Object.keys(values);
+    const that = this;
+    const promise = new Promise(function (resolve, reject) {
 
-        const outings = keys.map(function (key) {
-          const d = values[key];
-          d['uid'] = key;
-          return d;
-        });
-        cb(outings);
-
+      let bla = firebase.database().ref('/outings').orderByChild(attribute).limitToFirst(50);
+      if (ascending === false) {
+        bla = firebase.database().ref('/outings').orderByChild(attribute).limitToLast(50);
       }
-    );
-  }
 
-  getRoutes(cb, origin: string) {
+      bla.once('value', (data: DataSnapshot) => {
+        const accesses = data.val();
+        const promises = [];
+        Object.keys(accesses).forEach(a => {
+          promises.push(that.getRoute(a, user));
+        });
 
-    const attr = 'accessibility/' + origin + '/pt_duration';
-    firebase.database().ref('/outings').orderByChild(attr).limitToFirst(50).on('value', (data: DataSnapshot) => {
-      const routes = data.val();
+        const results = Promise.all(promises);
+        results.then(routes => {
 
-      let outings = [];
-      Object.keys(routes).forEach(r_uid => {
-        const route = routes[r_uid];
-        route.uid = r_uid;
-        outings.push(route);
+          if (ascending) {
+
+            resolve(routes.sort((a, b) => (a[attribute] > b[attribute]) ? 1 : -1));
+          } else {
+            resolve(routes.sort((a, b) => (a[attribute] > b[attribute]) ? -1 : 1));
+
+          }
+        });
       });
 
-      outings = outings.sort((a, b) => (a['accessibility'][origin]['pt_duration'] > b['accessibility'][origin]['pt_duration']) ? 1 : -1);
 
-      cb(outings);
     });
+
+    return promise;
 
 
   }
 
-  getSingleBook(id: string, cb) {
-    firebase.database().ref('/outings/' + id).on('value', (data: DataSnapshot) => {
-      cb(data.val());
+  getRoutesByAccessibility(user, attribute): any {
+    const that = this;
+    const promise = new Promise(function (resolve, reject) {
+
+      firebase.database().ref('/accesses/' + user.origin).orderByChild(attribute).limitToFirst(50).once('value', (data: DataSnapshot) => {
+        const accesses = data.val();
+        const promises = [];
+        Object.keys(accesses).forEach(a => {
+          promises.push(that.getRoute(a, user));
+        });
+
+        const results = Promise.all(promises);
+        results.then(routes => {
+
+          resolve(routes.sort((a, b) => (a[attribute] > b[attribute]) ? 1 : -1));
+        });
+      });
+
+
+    });
+
+    return promise;
+
+  }
+
+
+  getRoute(id: string, user: any) {
+
+    const attributes = ['pt_duration', 'car_duration', 'from_station', 'pt_arrival', 'pt_departure', 'pt_to'];
+
+
+    // attributes.forEach((att) => {
+    //  route[att] = accesses[a][att];
+    // });
+
+    return firebase.database().ref('/outings/' + id).once('value').then((x) => {
+      let route = new Outing();
+      route = x.val();
+      route['uid'] = id;
+      route['origin'] = user.origin;
+      route['todo'] = false;
+      if (user['todos'] !== undefined && user['todos'][id] !== undefined) {
+        route['todo'] = user['todos'][id]['value'];
+      }
+      route['hide'] = false;
+      if (user['hides'] !== undefined && user['hides'][id] !== undefined) {
+        route['hide'] = user['hides'][id]['value'];
+      }
+      return route;
+    }).then((route) => {
+      return firebase.database().ref('/accesses/' + user.origin + '/' + route['uid']).once('value').then((a) => {
+        const access = a.val();
+        attributes.forEach((att) => {
+          if (access === undefined || access === null) {
+            route[att] = null;
+          } else {
+            route[att] = access[att];
+          }
+        });
+        return route;
+
+      });
     });
   }
 
@@ -65,13 +123,6 @@ export class OutingsService {
     });
   }
 
-  getConditions(id: string, cb) {
-
-    firebase.database().ref('/conditions/' + id).on('value', (data: DataSnapshot) => {
-      cb(data.val());
-    });
-
-  }
 
   getGeo(id: string, cb) {
     firebase.database().ref('/geo/' + id).on('value', (data: DataSnapshot) => {
@@ -79,16 +130,5 @@ export class OutingsService {
     });
   }
 
-  getReco(id: string, cb) {
-    firebase.database().ref('/recommandations/' + id + '/scores').orderByChild('score').limitToLast(50).on('value', (data: DataSnapshot) => {
-      cb(data.val());
-    });
-  }
-
-  getRecoUser(id: string, cb) {
-    firebase.database().ref('/recommandations/' + id + '/user').on('value', (data: DataSnapshot) => {
-      cb(data.val());
-    });
-  }
 
 }

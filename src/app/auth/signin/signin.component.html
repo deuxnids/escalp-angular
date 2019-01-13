@@ -22,7 +22,13 @@
                   type="submit"
                   [disabled]="signinForm.invalid">Login
           </button>
+
+
         </form>
+        <button class="btn btn-primary"
+                (click)="resetPassword()">Mot de passe oublié
+        </button>
+
         <p class="text-danger">{{ errorMessage }}</p>
       </div>
     </div>

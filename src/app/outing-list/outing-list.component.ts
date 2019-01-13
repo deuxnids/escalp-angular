@@ -12,7 +12,8 @@ import {UsersService} from '../services/users.service';
 })
 export class OutingListComponent implements OnInit {
 
-  outings: any[];
+  outings;
+  filtered_outings;
   user: object;
   station: string;
   loading: boolean;
@@ -45,15 +46,83 @@ export class OutingListComponent implements OnInit {
     if (user !== null && user !== undefined) {
 
       this.user = user;
-      this.outingsService.getRoutes(routes => {
+      this.outingsService.getRoutesByAccessibility(user, 'pt_duration').then(routes => {
         this.outings = routes;
-        console.log(routes);
+        this.filtered_outings = routes.filter(r => !r.hide);
         this.loading = false;
-      }, user['origin']);
+
+      });
 
     }
 
 
+  }
+
+  filterBy(value) {
+    switch (value) {
+      case 'hide':
+        this.filtered_outings = this.outings.filter(r => r.hide);
+        break;
+
+      case 'todo':
+        this.filtered_outings = this.outings.filter(r => r.todo);
+        break;
+      case 'none':
+        this.filtered_outings = this.outings.filter(r => !r.hide);
+        break;
+
+    }
+
+  }
+
+  sortBy(value) {
+    this.outings = [];
+    switch (value) {
+      case 'car':
+        this.outingsService.getRoutesByAccessibility(this.user, 'car_duration').then(routes => {
+          this.setRoutes(routes);
+        });
+        break;
+      case 'pt':
+        this.outingsService.getRoutesByAccessibility(this.user, 'pt_duration').then(routes => {
+          this.setRoutes(routes);
+        });
+        break;
+      case 'den':
+        this.outingsService.getRoutesBy(this.user, 'height_diff_up', false).then(routes => {
+          this.setRoutes(routes);
+        });
+        break;
+      case 'altitude_min':
+        this.outingsService.getRoutesBy(this.user, 'elevation_min', false).then(routes => {
+          this.setRoutes(routes);
+        });
+        break;
+      case 'altitude_max':
+        this.outingsService.getRoutesBy(this.user, 'elevation_max', false).then(routes => {
+          this.setRoutes(routes);
+        });
+        break;
+
+    }
+
+  }
+
+  setRoutes(routes){
+    this.outings = routes;
+    this.filtered_outings = routes.filter(r => !r.hide);
+
+  }
+
+  toDo(route, value) {
+    this.userService.setToDo(route.uid, value);
+    route.todo = value;
+  }
+
+  setHide(route, value) {
+    this.userService.setHIde(route.uid, value);
+    //this.filtered_outings.splice(this.filtered_outings.indexOf(route), 1);
+    route.hide = value;
   }
 
   onNewBook() {

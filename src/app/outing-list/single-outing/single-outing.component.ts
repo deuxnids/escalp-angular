@@ -33,11 +33,10 @@ export class SingleOutingComponent implements OnInit {
     const p_id = this.route.snapshot.queryParams['user'];
 
     this.userService.userSubject.subscribe(user => {
-      console.log(user);
       if (user !== null && user !== undefined) {
         this.user = user;
-        this.booksService.getSingleBook(this.id,
-          (book: Outing) => {
+        this.booksService.getRoute(this.id, user).then(
+          (book) => {
             this.outing = book;
             this.loading = false;
             const urls = this.outing.source.split('/');

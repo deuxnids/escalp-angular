@@ -42,5 +42,9 @@ export class SigninComponent implements OnInit {
       }
     );
   }
+
+  resetPassword() {
+    this.authService.sendPasswordResetEmail(this.signinForm.get('email').value)
+  }
 }
 
