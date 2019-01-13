@@ -33,25 +33,30 @@ export class SingleOutingComponent implements OnInit {
     const p_id = this.route.snapshot.queryParams['user'];
 
     this.userService.userSubject.subscribe(user => {
-      if (user !== null && user !== undefined) {
-        this.user = user;
-        this.booksService.getRoute(this.id, user).then(
-          (book) => {
-            this.outing = book;
-            this.loading = false;
-            const urls = this.outing.source.split('/');
-            this.source = urls[urls.length - 1];
-            this.source = 'https://www.camptocamp.org/routes/' + this.source;
-          });
-
-
-      }
+      this.loadForUser(user);
     });
 
     if (p_id !== undefined) {
-      this.userService.saveToken(p_id);
-    } else {
-      this.userService.emitUser();
+      this.userService.getUserCB(p_id, (user) => {
+        this.loadForUser(user);
+      });
+    }
+  }
+
+
+  loadForUser(user) {
+    if (user !== null && user !== undefined) {
+      this.user = user;
+      this.booksService.getRoute(this.id, user).then(
+        (book) => {
+          this.outing = book;
+          this.loading = false;
+          const urls = this.outing.source.split('/');
+          this.source = urls[urls.length - 1];
+          this.source = 'https://www.camptocamp.org/routes/' + this.source;
+        });
+
+
     }
   }
 

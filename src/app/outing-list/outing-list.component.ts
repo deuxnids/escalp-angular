@@ -34,9 +34,13 @@ export class OutingListComponent implements OnInit {
     });
 
     if (p_id !== undefined) {
-      this.userService.saveToken(p_id);
+      this.userService.getUserCB(p_id, (user) => {
+        this.fetchForUser(user);
+      });
     } else {
-      this.userService.emitUser();
+      if (this.userService.user !== null) {
+        this.fetchForUser(this.userService.user);
+      }
     }
 
 
@@ -108,7 +112,7 @@ export class OutingListComponent implements OnInit {
 
   }
 
-  setRoutes(routes){
+  setRoutes(routes) {
     this.outings = routes;
     this.filtered_outings = routes.filter(r => !r.hide);
 

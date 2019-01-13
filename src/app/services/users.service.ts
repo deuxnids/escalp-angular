@@ -26,9 +26,6 @@ export class UsersService {
     });
   }
 
-  saveToken(token: String) {
-    this.getUser(token);
-  }
 
   createUser(user: User, u_id: string) {
     return firebase.database().ref('users/' + u_id).set(user);
@@ -48,7 +45,10 @@ export class UsersService {
       if (authUser !== null) {
         this.uid = authUser.uid;
         console.log(this.uid);
-        this.getUser(this.uid);
+        this.getUserCB(this.uid, user => {
+          this.user = user;
+          this.emitUser();
+        });
       }
     });
   }
@@ -82,6 +82,17 @@ export class UsersService {
         this.emitUser();
       }
     });
+
+  }
+
+  getUserCB(uid, cb) {
+
+    firebase.database().ref('users/' + uid).once('value', (data) => {
+      if (data.val() !== undefined) {
+        cb(data.val());
+      }
+    });
+
 
   }
 

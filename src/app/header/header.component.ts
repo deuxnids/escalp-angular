@@ -28,6 +28,7 @@ export class HeaderComponent implements OnInit {
           this.isAuth = true;
         } else {
           this.isAuth = false;
+          this.user = null;
         }
       }
     );
