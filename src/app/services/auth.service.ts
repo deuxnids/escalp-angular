@@ -1,18 +1,19 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as firebase from 'firebase';
 
 
 @Injectable()
 export class AuthService {
 
-  constructor() { }
+  constructor() {
+  }
 
   createNewUser(email: string, password: string) {
     return new Promise(
       (resolve, reject) => {
         firebase.auth().createUserWithEmailAndPassword(email, password).then(
-          () => {
-            resolve();
+          (user) => {
+            resolve(user);
           },
           (error) => {
             reject(error);
@@ -21,6 +22,14 @@ export class AuthService {
       }
     );
   }
+
+  changePassword(password) {
+    const user = firebase.auth().currentUser;
+    return new Promise((resolve, reject) => {
+      user.updatePassword(password).then(() => resolve({user: user}), reject);
+    });
+  }
+
   signInUser(email: string, password: string) {
     return new Promise(
       (resolve, reject) => {

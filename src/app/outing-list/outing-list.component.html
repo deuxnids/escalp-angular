@@ -3,7 +3,7 @@
 
     <h1>Propositions de courses</h1>
 
-    <h4>{{user}}, au départ de {{station}}</h4>
+    <h4 *ngIf="!loading">{{user.first_name}}, au départ de {{user.origin}}</h4>
 
     <div class="album py-5 bg-light">
       <div class="container">
@@ -29,8 +29,10 @@
                       Découvrir
                     </button>
                   </div>
-                  <small class="text-muted"> voiture: {{book.car_duration | number:'1.0-0'}} min | tp:
-                    {{book.pt_duration | number:'1.0-0'}} min | score: {{book.score | number:'1.0-1'}}
+                  <small class="text-muted"> voiture: {{book.accessibility[user.origin].car_duration | number:'1.0-0'}}
+                    min | tp:
+                    {{book.accessibility[user.origin].pt_duration | number:'1.0-0'}} min | score: {{book.score |
+                    number:'1.0-1'}}
                   </small>
                 </div>
               </div>

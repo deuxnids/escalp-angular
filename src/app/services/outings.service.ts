@@ -31,6 +31,27 @@ export class OutingsService {
     );
   }
 
+  getRoutes(cb, origin: string) {
+
+    const attr = 'accessibility/' + origin + '/pt_duration';
+    firebase.database().ref('/outings').orderByChild(attr).limitToFirst(50).on('value', (data: DataSnapshot) => {
+      const routes = data.val();
+
+      let outings = [];
+      Object.keys(routes).forEach(r_uid => {
+        const route = routes[r_uid];
+        route.uid = r_uid;
+        outings.push(route);
+      });
+
+      outings = outings.sort((a, b) => (a['accessibility'][origin]['pt_duration'] > b['accessibility'][origin]['pt_duration']) ? 1 : -1);
+
+      cb(outings);
+    });
+
+
+  }
+
   getSingleBook(id: string, cb) {
     firebase.database().ref('/outings/' + id).on('value', (data: DataSnapshot) => {
       cb(data.val());

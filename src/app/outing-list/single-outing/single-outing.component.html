@@ -12,11 +12,11 @@
 
 
 <section class="py-5">
-  <div class="container">
+  <div class="container" *ngIf="!loading">
 
 
     <h1>{{ outing.name }}</h1>
-    <h4>Pour {{user}}, au départ de {{from}}</h4>
+    <h4>Pour {{user.first_name}}, au départ de {{user.origin}}</h4>
     <!--  <div class="row" *ngIf="loading">
         <div class="col-xs-2 col-xs-offset-5">
 
@@ -43,13 +43,15 @@
 
             <img class="mr-3" src="assets/icone_bus_noir-01.png" alt="..." style="width: 64px; height: 64px;">
             <div class="media-body">
-              <h5 class="mt-0 mb-1">Accès depuis {{from}}</h5>
+              <h5 class="mt-0 mb-1">Accès depuis {{user.origin}}</h5>
               <ul>
-                <li>Voiture: {{car_duration  | number:'1.0-0'}} min</li>
-                <li>Transports publics ({{pt_to}}):</li>
+                <li>Voiture: {{outing.accessibility[user.origin].car_duration | number:'1.0-0'}} min</li>
+                <li>Transports publics ({{ outing.accessibility[user.origin].pt_to }}):</li>
                 <ul>
-                  <li>le plus rapide: {{pt_duration  | number:'1.0-0'}} min</li>
-                  <li>le plus tôt: {{pt_departure | date :"hh:mm"}}-> {{pt_arrival | date :"hh:mm"}}</li>
+                  <li>le plus rapide: {{ outing.accessibility[user.origin].pt_duration | number:'1.0-0'}} min</li>
+                  <li>le plus tôt: {{outing.accessibility[user.origin].pt_departure | date :"hh:mm"}}->
+                    {{outing.accessibility[user.origin].pt_arrival | date :"hh:mm"}}
+                  </li>
                 </ul>
 
               </ul>
@@ -61,13 +63,25 @@
             <img class="mr-3" src="assets/avalanche.png" alt="..." style="width: 64px; height: 64px;">
             <div class="media-body">
               <h5 class="mt-0 mb-1">Avalanche</h5>
-              <p *ngFor="let avalanche of dangers">
-                {{avalanche["date"] | date:'medium' }}
-                {{avalanche['dangerlevel']}}
+              <p>
+                {{outing.conditions.avalanches[0]["date"] | date:'medium' }}
+                {{outing.conditions.avalanches[0]['dangerlevel']}}
               </p>
 
             </div>
           </li>
+          <!--<li class="media">
+            <img class="mr-3" src="assets/avalanche.png" alt="..." style="width: 64px; height: 64px;">
+            <div class="media-body">
+              <h5 class="mt-0 mb-1">Avalanche</h5>
+              <p *ngFor="let weather of weathers">
+                {{weather | json}}
+              </p>
+
+            </div>
+          </li>
+-->
+
         </ul>
 
 
@@ -93,6 +107,9 @@
   </div>
 
 </section>
+
+
+
 
 
 

@@ -15,6 +15,7 @@ export class TransportsService {
   }
 
   search(value): Observable<any> {
+    console.log(value);
     const url = this.url + 'locations?query=' + value;
     return this.http.get(url);
   }

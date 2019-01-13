@@ -7,10 +7,13 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
+        <li class="nav-item"  *ngIf="user">
+          <a routerLink="profile" class="nav-link">Profil de {{user.first_name}}</a>
+        </li>
 
 
         <li class="nav-item">
-          <a routerLink="outings/{{token}}" class="nav-link">Propositions de courses</a>
+          <a routerLink="outings" class="nav-link">Propositions de courses</a>
         </li>
 
 

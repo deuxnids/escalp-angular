@@ -8,19 +8,29 @@ import {Observable, Subject} from 'rxjs';
 @Injectable()
 export class UsersService {
   uid;
-  user: User = new User();
+  user: User;
   userSubject = new Subject<User>();
-  tokenSubject = new Subject<any>();
 
 
   constructor() {
-    this.saveToken('fdc0250bbb251d504e7d2e4457750e6a');
+
+    firebase.database().ref('users/' + 'skMxTbf6gedeciwyEfxUwe7Dacs1').on('value', (data) => {
+      if (data.val() !== undefined) {
+        this.user = data.val();
+        this.emitUser();
+        this.onAuthStateChanged();
+      }
+    });
+
 
   }
 
   saveToken(token: String) {
-    this.uid = token;
-    this.tokenSubject.next(this.uid);
+    this.getUser(token);
+  }
+
+  createUser(user: User, u_id: string) {
+    return firebase.database().ref('users/' + u_id).set(user);
   }
 
 
@@ -32,15 +42,26 @@ export class UsersService {
     firebase.database().ref('users/' + this.uid).set(user);
   }
 
-  getUser() {
+  onAuthStateChanged() {
     firebase.auth().onAuthStateChanged(authUser => {
-      this.uid = authUser.uid;
+      if (authUser !== null) {
+        this.uid = authUser.uid;
+        this.getUser(this.uid);
+      }
+    });
+  }
 
-      firebase.database().ref('users/' + this.uid).on('value', (data) => {
+  getUser(uid) {
+
+
+    firebase.database().ref('users/' + uid).on('value', (data) => {
+      if (data.val() !== undefined) {
+
         this.user = data.val();
         this.emitUser();
-      });
+      }
     });
+
   }
 }
 

@@ -1,9 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {switchMap} from 'rxjs/operators';
 import {TransportsService} from '../services/transports.service';
+import {AuthService} from '../services/auth.service';
+import {UsersService} from '../services/users.service';
+import {User} from '../models/user.model';
 
 interface MailChimpResponse {
   result: string;
@@ -17,35 +20,52 @@ interface MailChimpResponse {
   styleUrls: ['./signup-form.component.scss']
 })
 export class SignupFormComponent implements OnInit {
-
   submitted = false;
-  mailChimpEndpoint = 'https://nest-or.us19.list-manage.com/subscribe/post-json?u=970a4e52e4efd4ad7e9b1f1fc&amp;id=552300db50&';
   error = '';
   filteredStations = [];
+  edit = true;
+  button = 'modifier';
 
-  profileForm = new FormGroup({
-    // reactive form components
-    email: new FormControl('', [
-      Validators.required,
-      Validators.email,
-    ]),
-    firstName: new FormControl('', [
-      Validators.required
-    ]),
+  profileForm: FormGroup;
+  @Input() user: User;
 
-    lastName: new FormControl('', [
-      Validators.required
-    ]),
-    ptStop: new FormControl('', [
-      Validators.required
-    ])
-  });
+  constructor(private http: HttpClient, private router: Router, private transportService: TransportsService,
+              private authService: AuthService, private userServices: UsersService) {
 
 
-  constructor(private http: HttpClient, private router: Router, private transportService: TransportsService) {
   }
 
+
   ngOnInit() {
+
+
+    console.log(this.user);
+    if (this.user == null) {
+      this.edit = false;
+      this.user = new User();
+      this.button = 's\'inscrire';
+    }
+
+    this.profileForm = new FormGroup({
+      // reactive form components
+      email: new FormControl(this.user.email, [
+        Validators.required,
+        Validators.email,
+      ]),
+      firstName: new FormControl(this.user.first_name, [
+        Validators.required
+      ]),
+
+      lastName: new FormControl(this.user.last_name, [
+        Validators.required
+      ]),
+      password: new FormControl('', [Validators.required, Validators.pattern(/[0-9a-zA-Z]{6,}/)]),
+      ptStop: new FormControl(this.user.origin, [
+        Validators.required
+      ])
+    });
+
+
     this.profileForm
       .get('ptStop')
       .valueChanges
@@ -54,41 +74,61 @@ export class SignupFormComponent implements OnInit {
         )
       )
       .subscribe(stations => {
-        console.log(stations);
         this.filteredStations = stations.stations;
       });
   }
 
 
   submit() {
-    this.error = '';
-    if (this.profileForm.valid) {
-      const value = this.profileForm.value;
-      console.log(value);
+    const email = this.profileForm.get('email').value;
+    const f_name = this.profileForm.get('firstName').value;
+    const l_name = this.profileForm.get('lastName').value;
+    const origin = this.profileForm.get('ptStop').value;
+    const password = this.profileForm.get('password').value;
 
-      const params = new HttpParams()
-        .set('EMAIL', value['email'])
-        .set('FNAME', value['firstName'])
-        .set('LNAME', value['lastName'])
-        .set('STATION', value['ptStop'])
-        .set('b_970a4e52e4efd4ad7e9b1f1fc_552300db50', ''); // hidden input name
 
-      const mailChimpUrl = this.mailChimpEndpoint + params.toString();
-
-      // 'c' refers to the jsonp callback param key. This is specific to Mailchimp
-      this.http.jsonp<MailChimpResponse>(mailChimpUrl, 'c').subscribe(response => {
-        if (response.result && response.result !== 'error') {
-          this.submitted = true;
-          this.router.navigate(['outings']);
-        } else {
-          this.error = response.msg;
+    if (this.edit) {
+      this.authService.changePassword(password).then(
+        (_user) => {
+          this.user.email = email;
+          this.user.first_name = f_name;
+          this.user.last_name = l_name;
+          this.user.origin = origin;
+          this.userServices.createUser(this.user, _user['user'].uid).then(() => {
+            this.router.navigate(['/outings']);
+          }, (error) => {
+            console.log(error);
+          });
+        },
+        (error) => {
+          this.error = error;
         }
-      }, error => {
-        console.error(error);
-        this.error = 'Sorry, an error occurred.';
-      });
+      );
+
+
     } else {
+
+      this.authService.createNewUser(email, password).then(
+        (_user) => {
+          this.user.email = email;
+          this.user.first_name = f_name;
+          this.user.last_name = l_name;
+          this.user.origin = origin;
+          this.userServices.createUser(this.user, _user['user'].uid).then(() => {
+            this.router.navigate(['/outings']);
+          }, (error) => {
+            console.log(error);
+          });
+        },
+        (error) => {
+          this.error = error;
+        }
+      );
+
+
     }
+
+
   }
 
 }

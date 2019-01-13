@@ -20,7 +20,7 @@ import {UsersService} from './services/users.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule, MatAutocompleteModule,
-  MatDatepickerModule, MatNativeDateModule, MatProgressSpinnerModule
+  MatDatepickerModule, MatNativeDateModule, MatProgressSpinnerModule, MatSliderModule
 } from '@angular/material';
 import {PlannerService} from './services/planner.service';
 import {LandingPageComponent} from './landing-page/landing-page.component';
@@ -32,9 +32,10 @@ import {JsonpModule} from '@angular/http';
 const appRoutes: Routes = [
   {path: 'auth/signup', component: SignupComponent},
   {path: 'auth/signin', component: SigninComponent},
-  {path: 'outings/:p_id', component: OutingListComponent},
-  {path: 'outings/:p_id/:id', component: SingleOutingComponent},
+  {path: 'outings', component: OutingListComponent},
+  {path: 'outings/:id', component: SingleOutingComponent},
   {path: 'profile', component: ProfileComponent},
+  {path: 'signin', component: SigninComponent},
   {path: '', component: LandingPageComponent},
 ];
 
@@ -61,7 +62,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     MatButtonModule, MatCheckboxModule,
     MatFormFieldModule, MatOptionModule, MatSelectModule,
-    MatInputModule, MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, MatProgressSpinnerModule,
+    MatInputModule, MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, MatProgressSpinnerModule, MatSliderModule,
     ReactiveFormsModule,
     NgbModule.forRoot(),
     HttpClientJsonpModule

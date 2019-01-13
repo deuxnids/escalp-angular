@@ -1,8 +1,9 @@
 export class User {
-  avatar: string;
-  sports: string[];
-  basecamps: string[];
-  name: string;
+  first_name: string;
+  last_name: string;
+  origin: string;
+  email: string;
+
   constructor() {
   }
 }

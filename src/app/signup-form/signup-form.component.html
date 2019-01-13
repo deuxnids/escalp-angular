@@ -14,6 +14,11 @@
     </mat-form-field>
 
     <mat-form-field class="full-width">
+      <input matInput type="password" placeholder="Mot de passe" formControlName="password">
+    </mat-form-field>
+
+
+    <mat-form-field class="full-width">
       <input matInput [matAutocomplete]="auto" formControlName='ptStop'
              placeholder="Arrêt transport public (le plus proche du domicile) ">
     </mat-form-field>
@@ -26,10 +31,11 @@
     </mat-autocomplete>
 
 
-    <input type="submit" value="s'inscrire" name="subscribe" id="mc-embedded-subscribe"
+    <input type="submit" value={{button}} name="subscribe" id="mc-embedded-subscribe"
            class="btn btn-primary" [disabled]="!profileForm.valid">
 
   </div>
 </form>
+<p class="text-danger">{{ error}}</p>
 
 

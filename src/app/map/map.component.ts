@@ -64,6 +64,8 @@ export class MapComponent implements OnInit, AfterViewInit {
     layers.push(slopes);
     layers.push(ski_layer);
 
+    document.getElementById('map-' + this.id).innerHTML = '';
+
 
     this.map = new this.ga.Map({
       target: 'map-' + this.id,
